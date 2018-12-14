@@ -24,20 +24,20 @@
         </div>
     </div>
     <div class="col-sm-7"> 
-        <form class="form" action="colleague.php" method="post">
+        <form class="form-group" action="colleague.php" method="post">
             <input type="hidden" name="name" value="new">
-            <label class="label"> firstName</label> : <input type="text" name="firstname" value=""><br />
-            <label class="label"> lastName</label> : <input type="text" name="lastName" value=""><br />
-            <label class="label"> gender</label> : <select name="gender">
+            <label class="label">Voornaam</label> : <input class="form-control" type="text" name="firstName" value=""><br />
+            <label class="label">Achternaam</label> : <input class="form-control" type="text" name="lastName" value=""><br />
+            <label class="label">Geslacht</label> : <select class="form-control" name="gender">
                 <option value="male">Man</option>
                 <option value="female">Vrouw</option>
-                <option value="neutral">neutraal</option>
+                <option value="neutral">Neutraal</option>
             </select><br />
-            <label class="label"> streetAddress</label> : <input type="text" name="streetAddress" value=""><br />
-            <label class="label"> cityName</label> : <input type="text" name="cityName" value=""><br />
-            <label class="label"> stateName</label> : <input type="text" name="stateName" value=""><br />
-            <label class="label"> zipCode</label> : <input type="text" name="zipCode" value=""><br />
-            <label class="label"> userName</label> : <input type="text" name="userName" value=""><br />
+            <label class="label">Straat</label> : <input class="form-control" type="text" name="streetAddress" value=""><br />
+            <label class="label">Woonplaats</label> : <input class="form-control" type="text" name="cityName" value=""><br />
+            <label class="label">Provincie</label> : <input class="form-control" type="text" name="stateName" value=""><br />
+            <label class="label">Postcode</label> : <input class="form-control" type="text" name="zipCode" value=""><br />
+            <label class="label">Loginnaam</label> : <input class="form-control" type="text" name="userName" value=""><br />
             <input type="submit" name="submit">
         </form>
     </div>

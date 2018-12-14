@@ -1,24 +1,6 @@
 <?php
-/**
-if(array_key_exists("name", $_POST)){
-        $namerequest = $_POST['name'];
-        
-        switch ($namerequest) {
-            case "home":
-                include 'section.php';
-                var_dump("function.php home is uitgevoerd");
-                break;
-            case "user":
-                include 'user.php';
-                var_dump("function.php user is uitgevoerd");
-                break;
-            default:
-                break;
-        }
-        
-        
-    }
-*/
+
+
 function returnsection($sectionName){
     switch ($sectionName) {
         case "home":
@@ -28,19 +10,7 @@ function returnsection($sectionName){
             include 'user.php';
             break;
         case "new":
-            $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
-            $result = readProjectFormResult($filename);
-            $result[]=array(
-            "firstname"=>$_POST["firstname"],
-            "lastName"=>$_POST["lastName"],
-            "gender"=>$_POST["gender"],
-            "streetAddress"=>$_POST["streetAddress"],
-            "cityName"=>$_POST["cityName"],
-            "stateName"=>$_POST["stateName"],
-            "zipCode"=>$_POST["zipCode"],
-            "userName"=>$_POST["userName"]
-            );
-            saveProjectFormResult($filename, $result);
+            checkUserExists();
             include 'user.php';
             break;
         default:
@@ -48,7 +18,7 @@ function returnsection($sectionName){
     }
 }
 function coleagueList(){
-$filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
+require_once 'settings.php';
 /**$colleagues = '[
 {
 "firstName":"Jarrett",
@@ -257,12 +227,12 @@ if(file_exists($filename)){
     $result = readProjectFormResult($filename);
     return $result;
 }else{
-    $templist = json_decode($colleagues, true);
+    //$templist = json_decode($colleagues, true);
     //foreach ($templist as $key => $value) {
-        saveProjectFormResult($filename, $templist);
+    //    saveProjectFormResult($filename, $templist);
     //}
-    $result = readProjectFormResult($filename);
-    return $result;
+    //$result = readProjectFormResult($filename);
+    //return $result;
 }
 }
 function saveProjectFormResult($path, $data){
@@ -281,4 +251,63 @@ function readProjectFormResult($path){
         }
     }
     return $result;
+}
+function getUserList(){
+    require_once 'settings.php';
+    $result = readProjectFormResult($filename);
+    return $result;
+}
+function checkUserExists(){
+    $result = getUserList();
+    $userName = $_POST["userName"];
+    $action="insert";
+    foreach ($result as $key => $value) {
+        if($value['userName'] == $userName){
+            $action="update"; 
+            break;
+        }
+    }
+    switch ($action) {
+        case "insert":
+            saveNewUser();
+            break;
+        case "update":
+            changeUser();
+            break;
+        default:
+            break;
+    }
+}
+function saveNewUser(){
+    $result = getUserList();
+    $result[]=array(
+        "firstname"=>$_POST["firstname"],
+        "lastName"=>$_POST["lastName"],
+        "gender"=>$_POST["gender"],
+        "streetAddress"=>$_POST["streetAddress"],
+        "cityName"=>$_POST["cityName"],
+        "stateName"=>$_POST["stateName"],
+        "zipCode"=>$_POST["zipCode"],
+        "userName"=>$_POST["userName"]
+    );
+    saveProjectFormResult($filename, $result);
+}
+function changeUser(){
+    $result = getUserList();
+    $userName = $_POST["userName"];
+    $newUserList = array();
+    foreach ($result as $key => $value) {
+        if($value['userName'] == $userName){
+            $value["firstname"]=$_POST["firstname"];
+            $value["lastName"]=$_POST["lastName"];
+            $value["gender"]=$_POST["gender"];
+            $value["streetAddress"]=$_POST["streetAddress"];
+            $value["cityName"]=$_POST["cityName"];
+            $value["stateName"]=$_POST["stateName"];
+            $value["zipCode"]=$_POST["zipCode"];
+            $value["userName"]=$_POST["userName"];
+        }
+        $newUserList[]=$value;
+    }
+    saveProjectFormResult($filename, $newUserList); 
 }
