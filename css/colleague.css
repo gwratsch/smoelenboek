@@ -1,4 +1,8 @@
-
+body.background-size{
+    background-image: url("../foto/backgroundImage2.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 #colleagueTable img{
     width:70px;
     height:auto;

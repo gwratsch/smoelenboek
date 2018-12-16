@@ -1,15 +1,29 @@
 <?php
-if(count($_POST)>0){
-    include_once 'modules/functions.php';
-    returnsection($_POST['name']);
-}else{
+include_once 'modules/functions.php';
+$requestname = "";
+$displayMainPage = "yes";
+if(array_key_exists ('name', $_POST)){
+    $requestname=$_POST['name'];
+    switch ($requestname) {
+        case "home":
+            $displayMainPage = "no";
+            break;
+        case "user":
+            $displayMainPage = "no";
+            break;
+        default:
+            break;
+    }
+    returnsection($requestname);
+}
+if($displayMainPage == "yes"){
 ?>
 <!DOCHTML html>
 <html lang="nl">
     <?php
     include 'head.php';
     ?>
-    <body>
+    <body class="background-size">
         <?php
         include 'header.php';
         include 'nav.php';

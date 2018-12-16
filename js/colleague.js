@@ -1,13 +1,37 @@
 function getSection(sectionName){
-$.post("colleague.php",
-    {
-      name: sectionName
-    },
-    function(data,status){
-        console.log(data);
-      $('section').replaceWith(data);
-    });
+    $.post("colleague.php",
+        {
+          name: sectionName
+        },
+        function(data,status){
+          $('section').replaceWith(data);
+        }
+    );
 }
+
+function getUserInfo(editUserName){
+    $.post("jsonResult.php",
+        {
+          name: 'read',
+          userName: editUserName
+        },
+        function(data,status,xhr){
+            console.log("ontvangen data: ");
+            console.log(data);
+            console.log(status);
+            document.getElementById('firstName').value=data.firstName;
+            document.getElementById('lastName').value=data.lastName;
+            document.getElementById('gender').value=data.gender;
+            document.getElementById('streetAddress').value=data.streetAddress;
+            document.getElementById('cityName').value=data.cityName;
+            document.getElementById('stateName').value=data.stateName;
+            document.getElementById('zipCode').value=data.zipCode;
+            document.getElementById('userName').value=data.userName;
+        },
+        'json'
+    );
+}
+
 function myFunction() {
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput");
