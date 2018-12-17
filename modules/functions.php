@@ -40,12 +40,8 @@ function readProjectFormResult($path){
             // fstat is used because it gives the correct filesize after updating the file.
             $filesStatus = fstat($projectfile);
             $filesize = $filesStatus[7];
-            logfile('filesize: '.filesize($path));
             $contenttext = fread($projectfile, $filesize);
-            logfile('filecontent: '.$contenttext);
             $result = json_decode($contenttext);
-            logfile('result content : '. json_encode($result));
-            logfile('result aantal tekens content : '. strlen($contenttext));
         }
         fclose($projectfile);
     }
