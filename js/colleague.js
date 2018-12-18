@@ -27,11 +27,37 @@ function getUserInfo(editUserName){
             document.getElementById('stateName').value=data.stateName;
             document.getElementById('zipCode').value=data.zipCode;
             document.getElementById('userName').value=data.userName;
+            document.getElementById('userImage').src =data.userImage;
+            document.getElementById('userImage').style.display ='block';
+            document.getElementById('inputUserImage').style.display ='none';
         },
         'json'
     );
 }
+function removeUserInfo(userName){
+    $.post("colleague.php",
+        {
+          name: 'remove',
+          userName: userName
+        },
+        function(data,status){
+          removeUserFromPage(userName);
+        }
+    );
+}
+function removeUserFromPage(userName) {
+  var input, filter, table, tr, td, i, txtValue;
+  input = userName;
+  filter = input.toUpperCase();
+  table = document.getElementsByClassName(userName);
+  table[0].style.display = "none";
+}
 
+function loadNewImage(){
+    document.getElementById('userImage').src =data.userImage;
+    document.getElementById('userImage').style.display ='block';
+    document.getElementById('inputUserImage').style.display ='none';
+}
 function myFunction() {
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput");

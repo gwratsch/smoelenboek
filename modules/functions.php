@@ -14,6 +14,9 @@ function returnsection($sectionName){
         case "read":
             include 'jsonResult.php';
             break;
+        case "remove":
+            removeResult();
+            break;
         default:
             break;
     }
@@ -75,6 +78,25 @@ function checkUserExists(){
             break;
     }
 }
+function removeResult(){
+    $result = getUserList();
+    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
+    $userName = $_POST["userName"];
+    $newList= array();
+    
+    foreach ($result as $key => $value) {
+        if($value->userName == $userName){
+            if(array_key_exists('userImage', $value)){
+                $userImage = $value->userImage;
+                if(file_exists($userImage)){unlink($userImage);}
+                $userImage='';
+            }
+        }else{
+            $newList[] = $value;
+        }
+    }
+    saveProjectFormResult($filename, $newList);
+}
 function saveNewUser(){
     $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
     include_once 'settings.php';
@@ -87,7 +109,8 @@ function saveNewUser(){
         "cityName"=>$_POST["cityName"],
         "stateName"=>$_POST["stateName"],
         "zipCode"=>$_POST["zipCode"],
-        "userName"=>$_POST["userName"]
+        "userName"=>$_POST["userName"],
+        "userImage"=>fileAction()
     );
     saveProjectFormResult($filename, $result);
 }
@@ -107,7 +130,8 @@ function changeUser(){
                 "cityName"=>$_POST["cityName"],
                 "stateName"=>$_POST["stateName"],
                 "zipCode"=>$_POST["zipCode"],
-                "userName"=>$_POST["userName"]
+                "userName"=>$_POST["userName"],
+                "userImage"=>fileAction()
             );
         }
         $newUserList[]=$value;
@@ -135,5 +159,58 @@ function logfile($data){
     $content = $data. PHP_EOL;
     fwrite($projectfile,$content);
     fclose($projectfile);
+    }
+}
+function fileAction(){
+    $target_dir = "foto/";
+    $className = "userImage";
+    $target_file = $target_dir . basename($_FILES[$className]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    // Check if image file is a actual image or fake image
+    if(isset($_POST["submit"])) {
+        $check = getimagesize($_FILES[$className]["tmp_name"]);
+        if($check !== false) {
+            $uploadOk = 1;
+        } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+    }
+    // Check if file already exists
+    if (file_exists($target_file)) {
+        $new_filename = $target_file;
+        $filefound = true;
+        $counter=1;
+        while($filefound){
+            $new_filename= str_replace('.'.$imageFileType, $counter.'.'.$imageFileType, $target_file);
+            if(!file_exists($new_filename)){
+                $target_file = $new_filename;
+                $filefound = false;
+            }
+            $counter +=1;
+        }
+    }
+    // Check file size
+    if ($_FILES[$className]["size"] > 500000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+    // Allow certain file formats
+    $imageFileType = array("jpg", "png", "jpeg","gif" );
+    if(in_array($imageFileType , $imageFileType)) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }
+
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    } else {
+        if (move_uploaded_file($_FILES[$className]["tmp_name"], $target_file)) {
+            //echo "The file ". basename( $_FILES[$className]["name"]). " has been uploaded.";
+            return $target_file;
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
     }
 }

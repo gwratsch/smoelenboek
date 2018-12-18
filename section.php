@@ -12,9 +12,11 @@
           $coleagueList = coleagueList();
           $tableContent = '';
           if(is_array($coleagueList)){
+          $defaultImage = "foto/is.jpg";
           foreach ($coleagueList as $key => $value) {
+              if(array_key_exists('userImage', $value)){$defaultImage = $value->userImage;}
               $tableContent = '<tr>
-              <td><img src="foto/is.jpg" alt="colleague Image"></td>
+              <td><img src="'.$defaultImage.'" alt="colleague Image"></td>
             <td>'.$value->firstName.' '.$value->lastName.'</td><td>'.$value->cityName.'</td>
           </tr>';
               echo $tableContent;

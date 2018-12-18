@@ -13,11 +13,15 @@
               include_once 'modules/functions.php';
               $coleagueList = coleagueList();
               $tableContent = '';
+              $defaultImage = "foto/is.jpg";
               foreach ($coleagueList as $key => $value) {
-                  $tableContent = '<tr>
-                  <td><img src="foto/is.jpg" alt="colleague Image"></td>
+                  if(array_key_exists('userImage', $value)){$defaultImage = $value->userImage;}
+                  $tableContent = '<tr class="'.$value->userName.'" style="display:content">
+                  <td><img src="'.$defaultImage.'" alt="colleague Image"></td>
                 <td>'.$value->firstName.' '.$value->lastName.'</td>
-              <td><a href="#" onclick="getUserInfo(\''.$value->userName.'\');">wijzig</a></td></tr>';
+              <td><a href="#" onclick="getUserInfo(\''.$value->userName.'\');">Wijzig</a><br />'
+                  .'<a href="#" onclick="removeUserInfo(\''.$value->userName.'\');">Delete</a>'
+                          . '</td></tr>';
                   echo $tableContent;
                   
               }
@@ -26,7 +30,7 @@
         </div>
     </div>
     <div class="col-sm-7"> 
-        <form class="form-group" action="colleague.php" method="post">
+        <form class="form-group" action="colleague.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="name" value="new">
             <label class="label">Voornaam</label> : <input id="firstName" class="form-control" type="text" name="firstName" value=""><br />
             <label class="label">Achternaam</label> : <input id="lastName" class="form-control" type="text" name="lastName" value=""><br />
@@ -39,8 +43,11 @@
             <label class="label">Woonplaats</label> : <input id="cityName" class="form-control" type="text" name="cityName" value=""><br />
             <label class="label">Provincie</label> : <input id="stateName" class="form-control" type="text" name="stateName" value=""><br />
             <label class="label">Postcode</label> : <input id="zipCode" class="form-control" type="text" name="zipCode" value=""><br />
-            <label class="label">Loginnaam</label> : <input id="userName" class="form-control" type="text" name="userName" value=""><br />
-            <input type="submit" name="submit">
+            <label class="label">Loginnaam</label> : <input id="userName" class="form-control" type="text" name="userName" value="" required><br />
+            <input id="inputUserImage" type="file" name="userImage" style="display:block"><br />
+            <img id="userImage" src="foto/is.jpg" alt="User image" style="display:none">
+            <a href="#" onclick="loadNewImage();" style="display:none">Verwijder</a>
+            <input class="mt-4 mb-2" type="submit" name="submit">
         </form>
     </div>
 </section>
