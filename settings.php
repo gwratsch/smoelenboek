@@ -1,3 +1,5 @@
 <?php
-$filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
+$filename = "colleagueInfo.txt";
+$iterator = new DirectoryIterator(dirname(__FILE__));
+$basepath = $iterator->getPath();
 

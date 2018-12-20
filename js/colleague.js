@@ -27,9 +27,12 @@ function getUserInfo(editUserName){
             document.getElementById('stateName').value=data.stateName;
             document.getElementById('zipCode').value=data.zipCode;
             document.getElementById('userName').value=data.userName;
-            document.getElementById('userImage').src =data.userImage;
-            document.getElementById('userImage').style.display ='block';
-            document.getElementById('inputUserImage').style.display ='none';
+            if("userImage" in data && data.userImage.length >0){
+                document.getElementById('userImage').src =data.userImage;
+                document.getElementById('userImage').style.display ='block';
+                document.getElementById('inputUserImage').style.display ='none';
+                document.getElementById('imageRemove').style.display ='block';
+            }
         },
         'json'
     );
@@ -54,9 +57,9 @@ function removeUserFromPage(userName) {
 }
 
 function loadNewImage(){
-    document.getElementById('userImage').src =data.userImage;
-    document.getElementById('userImage').style.display ='block';
-    document.getElementById('inputUserImage').style.display ='none';
+    document.getElementById('userImage').style.display ='none';
+    document.getElementById('inputUserImage').style.display ='block';
+    document.getElementById('imageRemove').style.display ='none';
 }
 function myFunction() {
   var input, filter, table, tr, td, i, txtValue;

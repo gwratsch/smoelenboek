@@ -15,7 +15,7 @@
               $tableContent = '';
               $defaultImage = "foto/is.jpg";
               foreach ($coleagueList as $key => $value) {
-                  if(array_key_exists('userImage', $value)){$defaultImage = $value->userImage;}
+                  if(array_key_exists('userImage', $value) && isset($value->userImage)){$defaultImage = $value->userImage;}
                   $tableContent = '<tr class="'.$value->userName.'" style="display:content">
                   <td><img src="'.$defaultImage.'" alt="colleague Image"></td>
                 <td>'.$value->firstName.' '.$value->lastName.'</td>
@@ -44,9 +44,9 @@
             <label class="label">Provincie</label> : <input id="stateName" class="form-control" type="text" name="stateName" value=""><br />
             <label class="label">Postcode</label> : <input id="zipCode" class="form-control" type="text" name="zipCode" value=""><br />
             <label class="label">Loginnaam</label> : <input id="userName" class="form-control" type="text" name="userName" value="" required><br />
-            <input id="inputUserImage" type="file" name="userImage" style="display:block"><br />
+            <input id="inputUserImage" type="file" name="userImage" style="display:block" value=""><br />
             <img id="userImage" src="foto/is.jpg" alt="User image" style="display:none">
-            <a href="#" onclick="loadNewImage();" style="display:none">Verwijder</a>
+            <a id="imageRemove" href="#" onclick="loadNewImage();" style="display:none">Verwijder</a>
             <input class="mt-4 mb-2" type="submit" name="submit">
         </form>
     </div>

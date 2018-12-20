@@ -22,12 +22,11 @@ function returnsection($sectionName){
     }
 }
 function coleagueList(){
-    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
-    include_once 'settings.php';
-if(file_exists($filename)){
-    $result = readProjectFormResult($filename);
-    return $result;
-}
+    $filename = "colleagueInfo.txt";
+    if(file_exists($filename)){
+        $result = readProjectFormResult($filename);
+        return $result;
+    }
 }
 function saveProjectFormResult($path, $data){
     $projectfile = fopen($path,'w');
@@ -52,8 +51,7 @@ function readProjectFormResult($path){
     return $result;
 }
 function getUserList(){
-    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
-    include_once 'settings.php';
+    $filename = "colleagueInfo.txt";
     $result = readProjectFormResult($filename);
     return $result;
 }
@@ -79,8 +77,8 @@ function checkUserExists(){
     }
 }
 function removeResult(){
+    $filename = "colleagueInfo.txt";
     $result = getUserList();
-    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
     $userName = $_POST["userName"];
     $newList= array();
     
@@ -98,8 +96,7 @@ function removeResult(){
     saveProjectFormResult($filename, $newList);
 }
 function saveNewUser(){
-    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
-    include_once 'settings.php';
+    require_once 'settings.php';
     $result = getUserList();
     $result[]=array(
         "firstName"=>$_POST["firstName"],
@@ -115,13 +112,14 @@ function saveNewUser(){
     saveProjectFormResult($filename, $result);
 }
 function changeUser(){
-    $filename="D:/wamp/www/cg/sites/face_book/colleagueInfo.txt";
-    include_once 'settings.php';
+    $filename = "colleagueInfo.txt";
     $result = getUserList();
     $userName = $_POST["userName"];
     $newUserList = array();
     foreach ($result as $key => $value) {
         if($value->userName == $userName){
+            $nameFile = fileAction();
+            if($nameFile == ''){$nameFile = $value->userImage;}
             $value= array(
                 "firstName"=>$_POST["firstName"],
                 "lastName"=>$_POST["lastName"],
@@ -131,7 +129,7 @@ function changeUser(){
                 "stateName"=>$_POST["stateName"],
                 "zipCode"=>$_POST["zipCode"],
                 "userName"=>$_POST["userName"],
-                "userImage"=>fileAction()
+                "userImage"=>$nameFile
             );
         }
         $newUserList[]=$value;
@@ -151,10 +149,10 @@ function readUserInfo(){
 }
 
 function logfile($data){
+    $logpath = "logfile.txt";
     $active="no";
     if($active == 'yes'){
-    $path = "D:/wamp/www/cg/sites/face_book/logfile.txt";
-    $projectfile = fopen($path,'a');
+    $projectfile = fopen($logpath,'a');
     if(is_array($data)){$data = json_encode($data);};
     $content = $data. PHP_EOL;
     fwrite($projectfile,$content);
@@ -164,11 +162,12 @@ function logfile($data){
 function fileAction(){
     $target_dir = "foto/";
     $className = "userImage";
+try{if(isset($_FILES) && $_FILES[$className]["name"] !=''){
     $target_file = $target_dir . basename($_FILES[$className]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     // Check if image file is a actual image or fake image
-    if(isset($_POST["submit"])) {
+    if(isset($_POST["submit"]) && $_FILES[$className]["tmp_name"] != '') {
         $check = getimagesize($_FILES[$className]["tmp_name"]);
         if($check !== false) {
             $uploadOk = 1;
@@ -207,10 +206,13 @@ function fileAction(){
         echo "Sorry, your file was not uploaded.";
     } else {
         if (move_uploaded_file($_FILES[$className]["tmp_name"], $target_file)) {
-            //echo "The file ". basename( $_FILES[$className]["name"]). " has been uploaded.";
             return $target_file;
         } else {
             echo "Sorry, there was an error uploading your file.";
         }
     }
+}
+} catch (Exception $e) {
+
+}
 }
