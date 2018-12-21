@@ -163,7 +163,9 @@ function fileAction(){
     $target_dir = "foto/";
     $className = "userImage";
 try{if(isset($_FILES) && $_FILES[$className]["name"] !=''){
-    $target_file = $target_dir . basename($_FILES[$className]["name"]);
+    $filename = $_FILES[$className]["name"];
+    $filename = str_replace(" ", "_", $filename);
+    $target_file = $target_dir . basename($filename);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     // Check if image file is a actual image or fake image
